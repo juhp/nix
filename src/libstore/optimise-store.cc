@@ -172,7 +172,7 @@ void LocalStore::optimisePath_(
         auto stLink = lstat(linkPath.string());
         if (st.st_size != stLink.st_size || (repair && hash != ({
                                                            hashPath(
-                                                               PosixSourceAccessor::createAtRoot(linkPath),
+                                                               makeFSSourceAccessor(linkPath),
                                                                FileSerialisationMethod::NixArchive,
                                                                HashAlgorithm::SHA256)
                                                                .hash;
@@ -312,7 +312,7 @@ void LocalStore::optimiseStore()
 
     optimiseStore(stats);
 
-    printInfo("%s freed by hard-linking %d files", showBytes(stats.bytesFreed), stats.filesLinked);
+    printInfo("%s freed by hard-linking %d files", renderSize(stats.bytesFreed), stats.filesLinked);
 }
 
 void LocalStore::optimisePath(const Path & path, RepairFlag repair)
